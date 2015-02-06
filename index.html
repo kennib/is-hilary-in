@@ -1,0 +1,33 @@
+<!doctype>
+
+<html>
+	<head>
+		<title>Is Hilary in?</title>
+	</head>
+	<body>
+		<h1>Is Hilary in?</h1>
+		<h2 id="hilary-status"></h2>
+
+		<script src="//cdnjs.cloudflare.com/ajax/libs/superagent/0.15.7/superagent.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js"></script>
+		<script>
+var URL = 'https://a.ninja.is/rest/v0/device/1313BB000389_0_0_11?user_access_token=25e44c45f66c376ae9d1e760a9a60a65c1a32631';
+var MOTION = '010101010101010101010101';
+var STATUS = document.querySelector('#hilary-status');
+
+STATUS.innerText = "Checking...";
+
+superagent.get(URL, function(result) {
+	var last_data = result.body.data.last_data;
+	var movement = last_data.DA == MOTION;
+	var five_minutes_ago = moment().subtract(5, 'minutes');
+	var recently = moment(last_data.timestamp).isAfter(five_minutes_ago);
+	if (movement && recently) {
+		STATUS.innerText = "Yes!";
+	} else {
+		STATUS.innerText = "No";
+	}
+});
+		</script>
+	</body>
+</html>
