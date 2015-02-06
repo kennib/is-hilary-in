@@ -12,23 +12,29 @@
 		<script src="//cdnjs.cloudflare.com/ajax/libs/superagent/0.15.7/superagent.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js"></script>
 		<script>
+var REFRESH_SECONDS = 60;
 var URL = 'https://a.ninja.is/rest/v0/device/1313BB000389_0_0_11?user_access_token=25e44c45f66c376ae9d1e760a9a60a65c1a32631';
 var MOTION = '010101010101010101010101';
 var STATUS = document.querySelector('#hilary-status');
 
-STATUS.textContent = "Checking...";
+function check() {
+	STATUS.textContent = "Checking...";
 
-superagent.get(URL, function(result) {
-	var last_data = result.body.data.last_data;
-	var movement = last_data.DA == MOTION;
-	var five_minutes_ago = moment().subtract(5, 'minutes');
-	var recently = moment(last_data.timestamp).isAfter(five_minutes_ago);
-	if (movement && recently) {
-		STATUS.textContent = "Yes!";
-	} else {
-		STATUS.textContent = "No";
-	}
-});
+	superagent.get(URL, function(result) {
+		var last_data = result.body.data.last_data;
+		var movement = last_data.DA == MOTION;
+		var five_minutes_ago = moment().subtract(5, 'minutes');
+		var recently = moment(last_data.timestamp).isAfter(five_minutes_ago);
+		if (movement && recently) {
+			STATUS.textContent = "Yes!";
+		} else {
+			STATUS.textContent = "No";
+		}
+	});
+}
+
+check();
+setInterval(check, REFRESH_SECONDS * 1000);
 		</script>
 	</body>
 </html>
