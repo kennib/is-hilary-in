@@ -16,7 +16,7 @@ var URL = 'https://a.ninja.is/rest/v0/device/1313BB000389_0_0_11?user_access_tok
 var MOTION = '010101010101010101010101';
 var STATUS = document.querySelector('#hilary-status');
 
-STATUS.innerText = "Checking...";
+STATUS.textContent = "Checking...";
 
 superagent.get(URL, function(result) {
 	var last_data = result.body.data.last_data;
@@ -24,9 +24,9 @@ superagent.get(URL, function(result) {
 	var five_minutes_ago = moment().subtract(5, 'minutes');
 	var recently = moment(last_data.timestamp).isAfter(five_minutes_ago);
 	if (movement && recently) {
-		STATUS.innerText = "Yes!";
+		STATUS.textContent = "Yes!";
 	} else {
-		STATUS.innerText = "No";
+		STATUS.textContent = "No";
 	}
 });
 		</script>
